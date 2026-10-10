@@ -1,0 +1,181 @@
+{
+  "hypothesis": "sequential time grows linearly in L; CUDA and fused stay flatter, so speedup grows with L",
+  "device": {
+    "name": "NVIDIA GeForce RTX 3060 Laptop GPU",
+    "total_memory_gb": 5.67,
+    "torch": "2.4.0+cu124"
+  },
+  "state_dim": 64,
+  "batch": 2,
+  "num_heads": 4,
+  "newton_iterations": 3,
+  "warmup": 3,
+  "reps": 5,
+  "timing": "median CUDA event, milliseconds, eager mode",
+  "cells": {
+    "ParaGRU": [
+      {
+        "mode": "sequential",
+        "L": 64,
+        "ms": 51.392513275146484
+      },
+      {
+        "mode": "parallel",
+        "L": 64,
+        "ms": 6.235167980194092
+      },
+      {
+        "mode": "parallel_CUDA",
+        "L": 64,
+        "ms": 5.77023983001709
+      },
+      {
+        "mode": "parallel_FUSED",
+        "L": 64,
+        "ms": 2.718719959259033
+      },
+      {
+        "mode": "sequential",
+        "L": 256,
+        "ms": 177.2584991455078
+      },
+      {
+        "mode": "parallel",
+        "L": 256,
+        "ms": 7.55404806137085
+      },
+      {
+        "mode": "parallel_CUDA",
+        "L": 256,
+        "ms": 5.335040092468262
+      },
+      {
+        "mode": "parallel_FUSED",
+        "L": 256,
+        "ms": 1.6015360355377197
+      },
+      {
+        "mode": "sequential",
+        "L": 1024,
+        "ms": 716.27880859375
+      },
+      {
+        "mode": "parallel",
+        "L": 1024,
+        "ms": 8.671232223510742
+      },
+      {
+        "mode": "parallel_CUDA",
+        "L": 1024,
+        "ms": 6.611968040466309
+      },
+      {
+        "mode": "parallel_FUSED",
+        "L": 1024,
+        "ms": 3.7498879432678223
+      },
+      {
+        "mode": "sequential",
+        "L": 4096,
+        "ms": 2913.313720703125
+      },
+      {
+        "mode": "parallel",
+        "L": 4096,
+        "ms": 11.814911842346191
+      },
+      {
+        "mode": "parallel_CUDA",
+        "L": 4096,
+        "ms": 8.069215774536133
+      },
+      {
+        "mode": "parallel_FUSED",
+        "L": 4096,
+        "ms": 3.8145599365234375
+      }
+    ],
+    "ParaLSTM": [
+      {
+        "mode": "sequential",
+        "L": 64,
+        "ms": 45.223934173583984
+      },
+      {
+        "mode": "parallel",
+        "L": 64,
+        "ms": 7.959551811218262
+      },
+      {
+        "mode": "parallel_CUDA",
+        "L": 64,
+        "ms": 4.687871932983398
+      },
+      {
+        "mode": "parallel_FUSED",
+        "L": 64,
+        "ms": 1.6771199703216553
+      },
+      {
+        "mode": "sequential",
+        "L": 256,
+        "ms": 192.42291259765625
+      },
+      {
+        "mode": "parallel",
+        "L": 256,
+        "ms": 8.354816436767578
+      },
+      {
+        "mode": "parallel_CUDA",
+        "L": 256,
+        "ms": 4.53107213973999
+      },
+      {
+        "mode": "parallel_FUSED",
+        "L": 256,
+        "ms": 1.6588799953460693
+      },
+      {
+        "mode": "sequential",
+        "L": 1024,
+        "ms": 784.7416381835938
+      },
+      {
+        "mode": "parallel",
+        "L": 1024,
+        "ms": 10.654656410217285
+      },
+      {
+        "mode": "parallel_CUDA",
+        "L": 1024,
+        "ms": 5.004288196563721
+      },
+      {
+        "mode": "parallel_FUSED",
+        "L": 1024,
+        "ms": 1.6832959651947021
+      },
+      {
+        "mode": "sequential",
+        "L": 4096,
+        "ms": 3234.979736328125
+      },
+      {
+        "mode": "parallel",
+        "L": 4096,
+        "ms": 172.68019104003906
+      },
+      {
+        "mode": "parallel_CUDA",
+        "L": 4096,
+        "ms": 45.925376892089844
+      },
+      {
+        "mode": "parallel_FUSED",
+        "L": 4096,
+        "ms": 20.723712921142578
+      }
+    ]
+  }
+}

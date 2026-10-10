@@ -1,0 +1,61 @@
+{
+  "hypothesis": "CUDA parallel reduction matches the PyTorch reduction and a sequential linear recurrence",
+  "device": {
+    "name": "NVIDIA GeForce RTX 3060 Laptop GPU",
+    "total_memory_gb": 5.67,
+    "torch": "2.4.0+cu124"
+  },
+  "errors": {
+    "diag": [
+      {
+        "L": 128,
+        "cuda_torch": 0.0,
+        "torch_seq": 0.0
+      },
+      {
+        "L": 1024,
+        "cuda_torch": 0.0,
+        "torch_seq": 0.0
+      },
+      {
+        "L": 4096,
+        "cuda_torch": 0.0,
+        "torch_seq": 0.0
+      }
+    ],
+    "block_diag_2x2": [
+      {
+        "L": 128,
+        "cuda_torch": 0.0,
+        "torch_seq": 0.0
+      },
+      {
+        "L": 1024,
+        "cuda_torch": 0.0,
+        "torch_seq": 0.0
+      },
+      {
+        "L": 4096,
+        "cuda_torch": 0.0,
+        "torch_seq": 0.0
+      }
+    ]
+  },
+  "diag_timings_ms": [
+    {
+      "L": 128,
+      "cuda": 0.03763199970126152,
+      "torch": 0.5160959959030151
+    },
+    {
+      "L": 1024,
+      "cuda": 0.04198399931192398,
+      "torch": 0.6767039895057678
+    },
+    {
+      "L": 4096,
+      "cuda": 0.07680000364780426,
+      "torch": 2.159615993499756
+    }
+  ]
+}

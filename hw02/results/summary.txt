@@ -1,0 +1,80 @@
+ParaRNN reproduction, lightweight GPU setup
+
+parallel, parallel_CUDA and parallel_FUSED match sequential fwd/bwd; analytic Jacobians match autograd
+device: NVIDIA GeForce RTX 3060 Laptop GPU
+
+ParaGRU
+  parallel: output 1.788e-07, input grad 4.768e-07, param grads {'A': 9.5367431640625e-06, 'B': 8.392333984375e-05, 'b': 5.340576171875e-05}
+  parallel_CUDA: output 1.788e-07, input grad 4.768e-07, param grads {'A': 9.5367431640625e-06, 'B': 8.392333984375e-05, 'b': 5.340576171875e-05}
+  parallel_FUSED: output 1.788e-07, input grad 4.768e-07, param grads {'A': 7.62939453125e-06, 'B': 9.918212890625e-05, 'b': 5.340576171875e-05}
+ParaLSTM
+  parallel: output 1.192e-07, input grad 1.192e-07, param grads {'A': 2.384185791015625e-06, 'B': 4.1961669921875e-05, 'C': 2.86102294921875e-06, 'b': 1.1444091796875e-05}
+  parallel_CUDA: output 1.192e-07, input grad 1.192e-07, param grads {'A': 2.384185791015625e-06, 'B': 4.1961669921875e-05, 'C': 3.337860107421875e-06, 'b': 1.33514404296875e-05}
+  parallel_FUSED: output 1.490e-07, input grad 1.192e-07, param grads {'A': 2.384185791015625e-06, 'B': 4.57763671875e-05, 'C': 2.86102294921875e-06, 'b': 1.33514404296875e-05}
+  jacobian inf: {'ParaGRU': 5.960464477539063e-08, 'ParaLSTM': 5.960464477539063e-08}
+
+3 Newton iterations match the sequential recurrence; extra length does not change that
+device: NVIDIA GeForce RTX 3060 Laptop GPU
+
+  ParaGRU L=128: {'1': 0.03826531767845154, '2': 0.000247269868850708, '3': 2.086162567138672e-07, '4': 1.7881393432617188e-07}
+  ParaGRU L=512: {'1': 0.04550713300704956, '2': 0.00030187517404556274, '3': 1.9371509552001953e-07, '4': 2.384185791015625e-07}
+  ParaGRU L=2048: {'1': 0.05143308639526367, '2': 0.0004436969757080078, '3': 2.384185791015625e-07, '4': 2.384185791015625e-07}
+  ParaLSTM L=128: {'1': 0.10098552703857422, '2': 0.0002032071352005005, '3': 1.7881393432617188e-07, '4': 1.1920928955078125e-07}
+  ParaLSTM L=512: {'1': 0.11816209554672241, '2': 0.00023508071899414062, '3': 1.7881393432617188e-07, '4': 1.1920928955078125e-07}
+  ParaLSTM L=2048: {'1': 0.1385074257850647, '2': 0.00026807188987731934, '3': 2.086162567138672e-07, '4': 1.4901161193847656e-07}
+
+sequential time grows linearly in L; CUDA and fused stay flatter, so speedup grows with L
+device: NVIDIA GeForce RTX 3060 Laptop GPU
+
+ParaGRU
+  sequential       L=64    51.393 ms
+  parallel         L=64    6.235 ms
+  parallel_CUDA    L=64    5.770 ms
+  parallel_FUSED   L=64    2.719 ms
+  sequential       L=256   177.258 ms
+  parallel         L=256   7.554 ms
+  parallel_CUDA    L=256   5.335 ms
+  parallel_FUSED   L=256   1.602 ms
+  sequential       L=1024  716.279 ms
+  parallel         L=1024  8.671 ms
+  parallel_CUDA    L=1024  6.612 ms
+  parallel_FUSED   L=1024  3.750 ms
+  sequential       L=4096  2913.314 ms
+  parallel         L=4096  11.815 ms
+  parallel_CUDA    L=4096  8.069 ms
+  parallel_FUSED   L=4096  3.815 ms
+ParaLSTM
+  sequential       L=64    45.224 ms
+  parallel         L=64    7.960 ms
+  parallel_CUDA    L=64    4.688 ms
+  parallel_FUSED   L=64    1.677 ms
+  sequential       L=256   192.423 ms
+  parallel         L=256   8.355 ms
+  parallel_CUDA    L=256   4.531 ms
+  parallel_FUSED   L=256   1.659 ms
+  sequential       L=1024  784.742 ms
+  parallel         L=1024  10.655 ms
+  parallel_CUDA    L=1024  5.004 ms
+  parallel_FUSED   L=1024  1.683 ms
+  sequential       L=4096  3234.980 ms
+  parallel         L=4096  172.680 ms
+  parallel_CUDA    L=4096  45.925 ms
+  parallel_FUSED   L=4096  20.724 ms
+
+CUDA parallel reduction matches the PyTorch reduction and a sequential linear recurrence
+device: NVIDIA GeForce RTX 3060 Laptop GPU
+
+  diag L=128: cuda-torch 0.000e+00, torch-seq 0.000e+00
+  diag L=1024: cuda-torch 0.000e+00, torch-seq 0.000e+00
+  diag L=4096: cuda-torch 0.000e+00, torch-seq 0.000e+00
+  block_diag_2x2 L=128: cuda-torch 0.000e+00, torch-seq 0.000e+00
+  block_diag_2x2 L=1024: cuda-torch 0.000e+00, torch-seq 0.000e+00
+  block_diag_2x2 L=4096: cuda-torch 0.000e+00, torch-seq 0.000e+00
+
+Parity task (prefix labels, lightweight stand-in for Table 1)
+device: NVIDIA GeForce RTX 3060 Laptop GPU
+L=50 dim=32 heads=4 batch=128 lr=0.003
+
+  LinearRNN    sequence acc 0.503  mean-over-positions 0.496  at step 400
+  ParaGRU      sequence acc 0.999  mean-over-positions 0.995  at step 250
+  ParaLSTM     sequence acc 1.000  mean-over-positions 0.994  at step 225

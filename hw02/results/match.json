@@ -1,0 +1,94 @@
+{
+  "hypothesis": "parallel, parallel_CUDA and parallel_FUSED match sequential fwd/bwd; analytic Jacobians match autograd",
+  "device": {
+    "name": "NVIDIA GeForce RTX 3060 Laptop GPU",
+    "total_memory_gb": 5.67,
+    "torch": "2.4.0+cu124"
+  },
+  "spec": {
+    "seq_length": 256,
+    "batch": 3,
+    "state_dim": 14,
+    "input_dim": 6,
+    "num_heads": 2
+  },
+  "cells": [
+    {
+      "cell": "ParaGRU",
+      "modes": [
+        {
+          "mode": "parallel",
+          "output_inf": 1.7881393432617188e-07,
+          "grad_inf": {
+            "A": 9.5367431640625e-06,
+            "B": 8.392333984375e-05,
+            "b": 5.340576171875e-05
+          },
+          "input_grad_inf": 4.76837158203125e-07
+        },
+        {
+          "mode": "parallel_CUDA",
+          "output_inf": 1.7881393432617188e-07,
+          "grad_inf": {
+            "A": 9.5367431640625e-06,
+            "B": 8.392333984375e-05,
+            "b": 5.340576171875e-05
+          },
+          "input_grad_inf": 4.76837158203125e-07
+        },
+        {
+          "mode": "parallel_FUSED",
+          "output_inf": 1.7881393432617188e-07,
+          "grad_inf": {
+            "A": 7.62939453125e-06,
+            "B": 9.918212890625e-05,
+            "b": 5.340576171875e-05
+          },
+          "input_grad_inf": 4.76837158203125e-07
+        }
+      ]
+    },
+    {
+      "cell": "ParaLSTM",
+      "modes": [
+        {
+          "mode": "parallel",
+          "output_inf": 1.1920928955078125e-07,
+          "grad_inf": {
+            "A": 2.384185791015625e-06,
+            "B": 4.1961669921875e-05,
+            "C": 2.86102294921875e-06,
+            "b": 1.1444091796875e-05
+          },
+          "input_grad_inf": 1.1920928955078125e-07
+        },
+        {
+          "mode": "parallel_CUDA",
+          "output_inf": 1.1920928955078125e-07,
+          "grad_inf": {
+            "A": 2.384185791015625e-06,
+            "B": 4.1961669921875e-05,
+            "C": 3.337860107421875e-06,
+            "b": 1.33514404296875e-05
+          },
+          "input_grad_inf": 1.1920928955078125e-07
+        },
+        {
+          "mode": "parallel_FUSED",
+          "output_inf": 1.4901161193847656e-07,
+          "grad_inf": {
+            "A": 2.384185791015625e-06,
+            "B": 4.57763671875e-05,
+            "C": 2.86102294921875e-06,
+            "b": 1.33514404296875e-05
+          },
+          "input_grad_inf": 1.1920928955078125e-07
+        }
+      ]
+    }
+  ],
+  "jacobian_inf": {
+    "ParaGRU": 5.960464477539063e-08,
+    "ParaLSTM": 5.960464477539063e-08
+  }
+}
